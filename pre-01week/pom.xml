@@ -50,7 +50,7 @@
                                     <path>/</path>
                                     <enableNaming>true</enableNaming>
                                     <tomcatConfigurationFilesDirectory>
-                                        src/main/webapp/META-INF/conf/
+                                        ../pre-02ioc/webapp/META-INF/conf/
                                     </tomcatConfigurationFilesDirectory>
                                 </configuration>
                             </execution>

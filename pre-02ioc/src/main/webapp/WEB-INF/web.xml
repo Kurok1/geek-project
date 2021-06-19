@@ -61,36 +61,21 @@
 
 
     <!-- Define example application events listeners -->
-<!--    <listener>-->
-<!--        <listener-class>listeners.ContextListener</listener-class>-->
-<!--    </listener>-->
+    <listener>
+        <listener-class>indi.kurok1.ioc.DataSourceContextListener</listener-class>
+    </listener>
 
     <!-- Define servlets that are included in the example application -->
 
     <servlet>
         <servlet-name>myServlet</servlet-name>
-        <servlet-class>indi.kurok1.pre.servlet.MyServlet</servlet-class>
-        <async-support>1</async-support>
-    </servlet>
-
-    <servlet>
-        <servlet-name>forwardServlet</servlet-name>
-        <servlet-class>indi.kurok1.pre.servlet.ForwardServlet</servlet-class>
-        <init-param>
-            <param-name>attribute</param-name>
-            <param-value>filters.ExampleFilter</param-value>
-        </init-param>
+        <servlet-class>indi.kurok1.ioc.DatabaseServlet</servlet-class>
     </servlet>
 
 
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/hello</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>forwardServlet</servlet-name>
-        <url-pattern>/hello/forward</url-pattern>
     </servlet-mapping>
 
 

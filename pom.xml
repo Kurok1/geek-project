@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>pre-01week</module>
+        <module>pre-02ioc</module>
     </modules>
 
     <properties>

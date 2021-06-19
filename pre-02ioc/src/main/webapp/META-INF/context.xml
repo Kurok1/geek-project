@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+    <!--使用apache dbcp  默认-->
+    <Resource
+            auth="Container"
+            driverClassName="com.mysql.cj.jdbc.Driver"
+            maxIdle="30"
+            maxTotal="50"
+            maxWaitMillis="-1"
+            name="jdbc/dbcp"
+            username="root"
+            password="123qwertyA"
+            type="javax.sql.DataSource"
+            url="jdbc:mysql://localhost:3306/test_jdbc?serverTimezone=GMT%2B8"/>
+
+    <!--使用Hikari数据源-->
+    <Resource
+            auth="Container"
+            driverClassName="com.mysql.cj.jdbc.Driver"
+            maximumPoolSize="50"
+            name="jdbc/hikari"
+            username="root"
+            password="123qwertyA"
+            type="javax.sql.DataSource"
+            factory="com.zaxxer.hikari.HikariJNDIFactory"
+            jdbcUrl="jdbc:mysql://localhost:3306/test_jdbc?serverTimezone=GMT%2B8"/>
+</Context>
