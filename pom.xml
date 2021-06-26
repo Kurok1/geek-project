@@ -11,6 +11,7 @@
     <modules>
         <module>pre-01week</module>
         <module>pre-02ioc</module>
+        <module>pre-03tomcat</module>
     </modules>
 
     <properties>
@@ -50,6 +51,7 @@
         <jackson.version>2.9.5</jackson.version>
         <activemq.version>5.9.1</activemq.version>
         <tomcat7.version>7.0.37</tomcat7.version>
+        <tomcat8.version>8.5.64</tomcat8.version>
         <lettuce.version>6.1.0.RELEASE</lettuce.version>
         <jedis.version>3.5.2</jedis.version>
         <mybatis.version>3.5.7</mybatis.version>
