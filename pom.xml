@@ -12,6 +12,7 @@
         <module>pre-01week</module>
         <module>pre-02ioc</module>
         <module>pre-03tomcat</module>
+        <module>pre-04-url-pattern</module>
     </modules>
 
     <properties>
