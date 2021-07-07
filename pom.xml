@@ -13,6 +13,7 @@
         <module>pre-02ioc</module>
         <module>pre-03tomcat</module>
         <module>pre-04-url-pattern</module>
+        <module>01-tags-support</module>
     </modules>
 
     <properties>
@@ -32,6 +33,7 @@
         <javax.cdi-api.version>2.0</javax.cdi-api.version>
         <javax.cache-api.version>1.1.1</javax.cache-api.version>
         <javax.interceptor-api.version>1.2</javax.interceptor-api.version>
+        <javax.jsp-api.version>2.3.0</javax.jsp-api.version>
 
         <!-- MicroProfile 版本-->
         <microprofile-config-api.version>2.0</microprofile-config-api.version>
@@ -109,6 +111,12 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>jstl</artifactId>
                 <version>${jstl.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet.jsp</groupId>
+                <artifactId>javax.servlet.jsp-api</artifactId>
+                <version>${javax.jsp-api.version}</version>
             </dependency>
 
             <!-- Java Commons Annotations -->
