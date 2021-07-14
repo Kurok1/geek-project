@@ -1,0 +1,4 @@
+indi.kurok1.configuration.converter.DefaultConverter
+indi.kurok1.configuration.converter.IntegerConverter
+indi.kurok1.configuration.converter.BigDecimalConverter
+indi.kurok1.configuration.converter.StringArrayConverter
