@@ -1,6 +1,7 @@
 package indi.kurok1.configuration;
 
 import indi.kurok1.configuration.converter.Converters;
+import indi.kurok1.configuration.source.ConfigSources;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigValue;
 import org.eclipse.microprofile.config.spi.ConfigSource;
@@ -18,11 +19,11 @@ import static java.util.stream.StreamSupport.stream;
  */
 class DefaultConfig implements Config {
 
-    private final List<ConfigSource> configSources;
+    private final ConfigSources configSources;
 
     private final Converters converters;
 
-    DefaultConfig(List<ConfigSource> configSources, Converters converters) {
+    DefaultConfig(ConfigSources configSources, Converters converters) {
         this.configSources = configSources;
         this.converters = converters;
     }

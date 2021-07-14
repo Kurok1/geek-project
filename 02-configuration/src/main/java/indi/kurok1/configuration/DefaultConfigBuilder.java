@@ -1,6 +1,7 @@
 package indi.kurok1.configuration;
 
 import indi.kurok1.configuration.converter.Converters;
+import indi.kurok1.configuration.source.ConfigSources;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.spi.ConfigBuilder;
 import org.eclipse.microprofile.config.spi.ConfigSource;
@@ -17,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class DefaultConfigBuilder implements ConfigBuilder {
 
-    private final List<ConfigSource> configSources = new CopyOnWriteArrayList<>();
+    private final ConfigSources configSources = new ConfigSources();
 
     private final Converters converters = new Converters();
 
@@ -57,7 +58,7 @@ public class DefaultConfigBuilder implements ConfigBuilder {
 
     @Override
     public ConfigBuilder withSources(ConfigSource... sources) {
-        configSources.addAll(Arrays.asList(sources));
+        configSources.with(Arrays.asList(sources));
         return this;
     }
 
