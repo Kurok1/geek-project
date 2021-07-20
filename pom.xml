@@ -15,6 +15,7 @@
         <module>pre-04-url-pattern</module>
         <module>01-tags-support</module>
         <module>02-configuration</module>
+        <module>03-rpc</module>
     </modules>
 
     <properties>
