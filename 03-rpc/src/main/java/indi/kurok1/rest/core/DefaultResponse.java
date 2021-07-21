@@ -77,7 +77,7 @@ public class DefaultResponse extends Response {
 
     private HttpURLConnection connection;
 
-    private HttpBodyConverter<?, ?> converter;
+    private HttpBodyConverter converter;
 
     public void setConnection(HttpURLConnection connection) {
         this.connection = connection;
@@ -176,23 +176,28 @@ public class DefaultResponse extends Response {
 
     @Override
     public <T> T readEntity(Class<T> entityType) {
-        T entity = null;
         try {
             InputStream inputStream = connection.getInputStream();
             // 参考 HttpMessageConverter 实现，实现运行时动态判断
+            if (converter != null) {
+                if (converter.isReadable(entityType, entityType.getGenericSuperclass(), annotations, mediaType)) {
+                    this.entity = converter.readFrom(entityType, entityType.getGenericSuperclass(), annotations, mediaType, null, inputStream);
+                    return (T) this.entity;
+                }
+            }
             if (String.class.equals(entityType)) {
                 Object value = IOUtils.toString(inputStream, encoding);
-                entity = (T) value;
+                this.entity = value;
             } else {
                 ObjectMapper objectMapper = new ObjectMapper();
-                entity = objectMapper.readValue(new InputStreamReader(inputStream, encoding), entityType);
+                this.entity = objectMapper.readValue(new InputStreamReader(inputStream, encoding), entityType);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
             connection.disconnect();
         }
-        return entity;
+        return (T) this.entity;
     }
 
     @Override

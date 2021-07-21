@@ -103,7 +103,7 @@ public class JacksonJsonHttpBodyConverter implements HttpBodyConverter<Object, O
     public JavaType getJavaType(Class<?> type, Type genericType) {
         if (!(genericType instanceof ParameterizedType)) {
             //不携带泛型
-            return mapper.getTypeFactory().constructType(genericType);
+            return mapper.getTypeFactory().constructType(type);
         } else {
             return resolveType(type, genericType);
         }

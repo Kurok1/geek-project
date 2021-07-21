@@ -102,7 +102,8 @@ public class ReflectiveRequestTemplateResolver implements RequestTemplateResolve
         try {
             paramName = (String) MethodUtils.invokeMethod(paramAnnotation, "value", ArrayUtils.EMPTY_OBJECT_ARRAY);
         } catch (Exception e) {
-            throw new IllegalStateException(e);
+            //throw new IllegalStateException(e);
+            return null;
         }
         return paramName;
     }

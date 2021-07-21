@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * HTTP post实现
@@ -40,6 +40,11 @@ public class HttpPostInvocation implements Invocation {
 
     private Entity<?> entity = null;
     private Properties properties = new Properties();
+
+    private HttpURLConnection connection = null;
+    private HttpBodyConverter converter;
+
+    private ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public HttpPostInvocation(MultivaluedMap<String, Object> headers, URI uri) {
         this.headers = headers;
@@ -71,50 +76,43 @@ public class HttpPostInvocation implements Invocation {
         this.entity = entity;
     }
 
-    private HttpHeaders toHttpHeaders() {
-        Locale locale = entity.getLanguage();
-        MediaType mediaType = entity.getMediaType();
-        return new DefaultHttpHeaders(headers, mediaType, locale);
-    }
-
     @Override
     public Invocation property(String name, Object value) {
         properties.put(name, value);
         return this;
     }
 
-    @Override
-    public Response invoke() {
-        HttpURLConnection connection = null;
+
+    private void sendRequest() {
         try {
-            InputStream inputStream = url.openStream();
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(HttpMethod.POST);
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
             setRequestHeaders(connection);
             writeEntity(connection);
-            // TODO Set the cookies
-            int statusCode = connection.getResponseCode();
-//            Response.ResponseBuilder responseBuilder = Response.status(statusCode);
-//
-//            responseBuilder.build();
-            DefaultResponse response = new DefaultResponse();
-            response.setConnection(connection);
-            response.setStatus(statusCode);
-            return response;
-//            Response.Status status = Response.Status.fromStatusCode(statusCode);
-//            switch (status) {
-//                case Response.Status.OK:
-//
-//                    break;
-//                default:
-//                    break;
-//            }
-
-        } catch (IOException e) {
-            // TODO Error handler
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return null;
     }
+
+    @Override
+    public Response invoke() {
+        sendRequest();
+        // TODO Set the cookies
+        int statusCode = 0;
+        try {
+            statusCode = connection.getResponseCode();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        DefaultResponse response = new DefaultResponse();
+        response.setConnection(connection);
+        response.setStatus(statusCode);
+        return response;
+    }
+
+
 
 
     private void writeEntity(HttpURLConnection connection) throws IOException {
@@ -123,17 +121,21 @@ public class HttpPostInvocation implements Invocation {
             Type type = clazz.getGenericSuperclass();
             Annotation[] annotations = entity.getAnnotations();
             MediaType mediaType = entity.getMediaType();
-            HttpBodyConverter converter = converters.getWriteableConverter(clazz, type, annotations, mediaType);
+            converter = converters.getWriteableConverter(clazz, type, annotations, mediaType);
             if (converter.isWriteable(clazz, type, annotations, mediaType)) {
                 OutputStream outputStream = connection.getOutputStream();
                 long length = converter.getSize(entity.getEntity(), clazz, type, annotations, mediaType);
-                connection.setRequestProperty(HttpHeaders.CONTENT_LENGTH, Long.toString(length));
+                //connection.setRequestProperty(HttpHeaders.CONTENT_LENGTH, Long.toString(length));
                 converter.writeTo(entity.getEntity(), clazz, type, annotations, mediaType, headers, outputStream);
             }
         }
     }
 
     private void setRequestHeaders(HttpURLConnection connection) {
+        this.properties.forEach(
+                (key, value)->
+                        connection.setRequestProperty(key.toString(), value.toString())
+        );
         for (Map.Entry<String, List<Object>> entry : headers.entrySet()) {
             String headerName = entry.getKey();
             for (Object headerValue : entry.getValue()) {
@@ -144,7 +146,22 @@ public class HttpPostInvocation implements Invocation {
 
     @Override
     public <T> T invoke(Class<T> responseType) {
-        return null;
+        sendRequest();
+        // TODO Set the cookies
+        int statusCode = 0;
+        try {
+            statusCode = connection.getResponseCode();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        DefaultResponse response = new DefaultResponse();
+        response.setConnection(connection);
+        response.setStatus(statusCode);
+        response.setConverter(converter);
+        response.readEntity(responseType);
+        response.setAnnotations(entity.getAnnotations());
+        response.setMediaType(entity.getMediaType());
+        return (T) response.getEntity();
     }
 
     @Override
@@ -154,12 +171,16 @@ public class HttpPostInvocation implements Invocation {
 
     @Override
     public Future<Response> submit() {
-        return null;
+        FutureTask<Response> futureTask = new FutureTask<>(this::invoke);
+        executorService.submit(futureTask);
+        return futureTask;
     }
 
     @Override
     public <T> Future<T> submit(Class<T> responseType) {
-        return null;
+        FutureTask<T> futureTask = new FutureTask<>(new PostCallable<>(responseType, this));
+        executorService.submit(futureTask);
+        return futureTask;
     }
 
     @Override
@@ -170,6 +191,23 @@ public class HttpPostInvocation implements Invocation {
     @Override
     public <T> Future<T> submit(InvocationCallback<T> callback) {
         return null;
+    }
+
+    public static class PostCallable<V> implements Callable<V> {
+
+        private final Class<V> responseType;
+
+        private final HttpPostInvocation invocation;
+
+        public PostCallable(Class<V> responseType, HttpPostInvocation invocation) {
+            this.responseType = responseType;
+            this.invocation = invocation;
+        }
+
+        @Override
+        public V call() throws Exception {
+            return invocation.invoke(responseType);
+        }
     }
 
 }

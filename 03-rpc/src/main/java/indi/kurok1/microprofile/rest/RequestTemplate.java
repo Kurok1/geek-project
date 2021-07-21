@@ -45,6 +45,7 @@ public class RequestTemplate {
      * @see CookieParam
      * @see HeaderParam
      * @see BeanParam
+     * @see HeaderParam
      */
     public static Set<Class<? extends Annotation>> SUPPORTED_PARAM_ANNOTATION_TYPES =
             unmodifiableSet(new LinkedHashSet<>(asList(
@@ -54,7 +55,8 @@ public class RequestTemplate {
                     FormParam.class,
                     CookieParam.class,
                     HeaderParam.class,
-                    BeanParam.class
+                    BeanParam.class,
+                    HeaderParam.class
             )));
 
     /**

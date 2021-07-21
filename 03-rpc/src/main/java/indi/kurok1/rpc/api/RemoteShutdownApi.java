@@ -18,6 +18,7 @@ public interface RemoteShutdownApi {
     public void shutdown();
 
     @POST
+    @Path(("/api/user/save"))
     @Produces("application/json")
     public User save(@BeanParam User user);
 

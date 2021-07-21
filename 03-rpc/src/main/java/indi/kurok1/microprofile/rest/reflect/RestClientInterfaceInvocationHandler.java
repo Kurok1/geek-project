@@ -19,18 +19,12 @@ package indi.kurok1.microprofile.rest.reflect;
 import indi.kurok1.microprofile.rest.annotation.AnnotatedParamMetadata;
 import indi.kurok1.microprofile.rest.RequestTemplate;
 
-import javax.ws.rs.BeanParam;
-import javax.ws.rs.MatrixParam;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.Configuration;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.Variant;
+import javax.ws.rs.core.*;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -102,6 +96,16 @@ public class RestClientInterfaceInvocationHandler implements InvocationHandler {
             uriBuilder.matrixParam(paramName, paramValue);
         }
 
+        MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
+
+        // Handle @HeaderParam
+        for (AnnotatedParamMetadata metadata : requestTemplate.getAnnotatedParamMetadata(HeaderParam.class)) {
+            String paramName = metadata.getParamName();
+            int paramIndex = metadata.getParameterIndex();
+            Object paramValue = args[paramIndex];
+            headers.add(paramName, paramValue);
+        }
+
         List<AnnotatedParamMetadata> beanParamMetaDatas = requestTemplate.getAnnotatedParamMetadata(BeanParam.class);
         Entity<?> entity = null;
         if (!beanParamMetaDatas.isEmpty()) {
@@ -120,6 +124,7 @@ public class RestClientInterfaceInvocationHandler implements InvocationHandler {
                     mediaType = MediaType.valueOf(produces.toArray(new String[1])[0]);
                 }
 
+                headers.add(HttpHeaders.CONTENT_TYPE, mediaType.toString());
                 Variant variant = new Variant(mediaType, Locale.CHINA, "UTF-8");
                 entity = Entity.entity(arg, variant, parameter.getDeclaredAnnotations());
             }
@@ -137,6 +142,7 @@ public class RestClientInterfaceInvocationHandler implements InvocationHandler {
 
         Invocation invocation = client.target(uri)
                 .request(acceptedResponseTypes)
+                .headers(headers)
                 .build(httpMethod, entity);
 
         return invocation.invoke(returnType);
