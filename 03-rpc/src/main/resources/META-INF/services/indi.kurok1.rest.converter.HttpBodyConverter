@@ -1,0 +1,2 @@
+indi.kurok1.rest.converter.JacksonJsonHttpBodyConverter
+indi.kurok1.rest.converter.StringHttpBodyConverter

@@ -44,6 +44,7 @@ public class RequestTemplate {
      * @see FormParam
      * @see CookieParam
      * @see HeaderParam
+     * @see BeanParam
      */
     public static Set<Class<? extends Annotation>> SUPPORTED_PARAM_ANNOTATION_TYPES =
             unmodifiableSet(new LinkedHashSet<>(asList(
@@ -52,8 +53,16 @@ public class RequestTemplate {
                     MatrixParam.class,
                     FormParam.class,
                     CookieParam.class,
-                    HeaderParam.class
+                    HeaderParam.class,
+                    BeanParam.class
             )));
+
+    /**
+     * 只允许出现一次的注解
+     */
+    public static Set<Class<? extends Annotation>> ANNOTATIONED_ONCE_TYPES = unmodifiableSet(new LinkedHashSet<>(asList(
+            BeanParam.class
+    )));
 
     /**
      * The value is resolved from {@link HttpMethod @HttpMethod}
@@ -74,6 +83,7 @@ public class RequestTemplate {
      * @see FormParam
      * @see CookieParam
      * @see HeaderParam
+     * @see BeanParam
      */
     private Map<Class<? extends Annotation>, List<AnnotatedParamMetadata>> annotatedParamMetadataMap = new HashMap<>();
 
@@ -110,6 +120,8 @@ public class RequestTemplate {
     public RequestTemplate annotatedParamMetadata(AnnotatedParamMetadata annotatedParamMetadata) {
         Class<? extends Annotation> annotationType = annotatedParamMetadata.getAnnotationType();
         List<AnnotatedParamMetadata> metadataList = annotatedParamMetadataMap.computeIfAbsent(annotationType, type -> new LinkedList<>());
+        if (ANNOTATIONED_ONCE_TYPES.contains(annotationType) && !metadataList.isEmpty())
+            throw new IllegalArgumentException(String.format("the annotation @%s only marked once", annotationType.getName()));
         metadataList.add(annotatedParamMetadata);
         return this;
     }

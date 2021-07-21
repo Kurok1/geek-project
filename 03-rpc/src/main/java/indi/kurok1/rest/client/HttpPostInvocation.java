@@ -1,14 +1,23 @@
 package indi.kurok1.rest.client;
 
+import indi.kurok1.rest.converter.HttpBodyConverter;
+import indi.kurok1.rest.converter.HttpBodyConverters;
+import indi.kurok1.rest.core.DefaultResponse;
+
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.core.*;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.net.*;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Future;
 
@@ -21,6 +30,8 @@ import java.util.concurrent.Future;
  */
 public class HttpPostInvocation implements Invocation {
 
+
+    private final HttpBodyConverters converters = new HttpBodyConverters();
 
     private final MultivaluedMap<String, Object> headers;
 
@@ -74,7 +85,61 @@ public class HttpPostInvocation implements Invocation {
 
     @Override
     public Response invoke() {
+        HttpURLConnection connection = null;
+        try {
+            InputStream inputStream = url.openStream();
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod(HttpMethod.POST);
+            setRequestHeaders(connection);
+            writeEntity(connection);
+            // TODO Set the cookies
+            int statusCode = connection.getResponseCode();
+//            Response.ResponseBuilder responseBuilder = Response.status(statusCode);
+//
+//            responseBuilder.build();
+            DefaultResponse response = new DefaultResponse();
+            response.setConnection(connection);
+            response.setStatus(statusCode);
+            return response;
+//            Response.Status status = Response.Status.fromStatusCode(statusCode);
+//            switch (status) {
+//                case Response.Status.OK:
+//
+//                    break;
+//                default:
+//                    break;
+//            }
+
+        } catch (IOException e) {
+            // TODO Error handler
+        }
         return null;
+    }
+
+
+    private void writeEntity(HttpURLConnection connection) throws IOException {
+        if (entity != null && entity.getEntity() != null) {
+            Class<?> clazz = entity.getClass();
+            Type type = clazz.getGenericSuperclass();
+            Annotation[] annotations = entity.getAnnotations();
+            MediaType mediaType = entity.getMediaType();
+            HttpBodyConverter converter = converters.getWriteableConverter(clazz, type, annotations, mediaType);
+            if (converter.isWriteable(clazz, type, annotations, mediaType)) {
+                OutputStream outputStream = connection.getOutputStream();
+                long length = converter.getSize(entity.getEntity(), clazz, type, annotations, mediaType);
+                connection.setRequestProperty(HttpHeaders.CONTENT_LENGTH, Long.toString(length));
+                converter.writeTo(entity.getEntity(), clazz, type, annotations, mediaType, headers, outputStream);
+            }
+        }
+    }
+
+    private void setRequestHeaders(HttpURLConnection connection) {
+        for (Map.Entry<String, List<Object>> entry : headers.entrySet()) {
+            String headerName = entry.getKey();
+            for (Object headerValue : entry.getValue()) {
+                connection.setRequestProperty(headerName, headerValue.toString());
+            }
+        }
     }
 
     @Override

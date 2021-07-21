@@ -19,6 +19,7 @@ package indi.kurok1.microprofile.rest.reflect;
 import indi.kurok1.microprofile.rest.annotation.AnnotatedParamMetadata;
 import indi.kurok1.microprofile.rest.RequestTemplate;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.MatrixParam;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -27,11 +28,17 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.Variant;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.net.URI;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * RestClient Interface Proxy {@link InvocationHandler}
@@ -95,13 +102,36 @@ public class RestClientInterfaceInvocationHandler implements InvocationHandler {
             uriBuilder.matrixParam(paramName, paramValue);
         }
 
+        List<AnnotatedParamMetadata> beanParamMetaDatas = requestTemplate.getAnnotatedParamMetadata(BeanParam.class);
+        Entity<?> entity = null;
+        if (!beanParamMetaDatas.isEmpty()) {
+            AnnotatedParamMetadata metadata = beanParamMetaDatas.get(0);
+
+            int index = metadata.getParameterIndex();
+            Object arg = args[index];
+            if (arg != null) {
+                Parameter parameter = method.getParameters()[index];
+                Set<String> produces = requestTemplate.getProduces();
+
+                MediaType mediaType = null;
+                if (produces.size() == 0 || produces.size() > 1) {
+                    mediaType = new MediaType();// */*
+                } else {
+                    mediaType = MediaType.valueOf(produces.toArray(new String[1])[0]);
+                }
+
+                Variant variant = new Variant(mediaType, Locale.CHINA, "UTF-8");
+                entity = Entity.entity(arg, variant, parameter.getDeclaredAnnotations());
+            }
+
+        }
+
         String httpMethod = requestTemplate.getMethod();
 
         String[] acceptedResponseTypes = requestTemplate.getProduces().toArray(new String[0]);
 
         Class<?> returnType = method.getReturnType();
 
-        Entity<?> entity = buildEntity(method, args);
 
         String uri = uriBuilder.build().toString();
 

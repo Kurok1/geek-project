@@ -17,6 +17,7 @@
 package indi.kurok1.rest.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import indi.kurok1.rest.converter.HttpBodyConverter;
 import org.apache.commons.io.IOUtils;
 
 import javax.ws.rs.core.*;
@@ -75,6 +76,8 @@ public class DefaultResponse extends Response {
     private Set<Link> links = new LinkedHashSet<>();
 
     private HttpURLConnection connection;
+
+    private HttpBodyConverter<?, ?> converter;
 
     public void setConnection(HttpURLConnection connection) {
         this.connection = connection;
@@ -300,5 +303,13 @@ public class DefaultResponse extends Response {
     @Override
     public String getHeaderString(String name) {
         return null;
+    }
+
+    public HttpBodyConverter<?, ?> getConverter() {
+        return converter;
+    }
+
+    public void setConverter(HttpBodyConverter<?, ?> converter) {
+        this.converter = converter;
     }
 }
