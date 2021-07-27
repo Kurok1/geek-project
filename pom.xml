@@ -16,6 +16,8 @@
         <module>01-tags-support</module>
         <module>02-configuration</module>
         <module>03-rpc</module>
+        <module>04-interceptor</module>
+        <module>project-commons</module>
     </modules>
 
     <properties>
@@ -62,6 +64,7 @@
         <mybatis.version>3.5.7</mybatis.version>
         <mybatis-spring.version>2.0.6</mybatis-spring.version>
         <curator.version>5.1.0</curator.version>
+        <cglib.version>3.3.0</cglib.version>
 
         <!-- Spring 依赖版本 -->
         <spring-boot.version>2.4.5</spring-boot.version>
@@ -332,6 +335,13 @@
             <dependency>
                 <groupId>commons-dbcp</groupId>
                 <artifactId>commons-dbcp</artifactId>
+            </dependency>
+
+            <!-- cglib -->
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>${cglib.version}</version>
             </dependency>
 
 
