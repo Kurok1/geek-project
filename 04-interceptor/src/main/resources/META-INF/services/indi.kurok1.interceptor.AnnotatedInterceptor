@@ -1,0 +1,7 @@
+indi.kurok1.interceptor.microprofile.faulttolerance.AsynchronousInterceptor
+indi.kurok1.interceptor.microprofile.faulttolerance.BulkheadInterceptor
+indi.kurok1.interceptor.microprofile.faulttolerance.CircuitBreakerInterceptor
+indi.kurok1.interceptor.microprofile.faulttolerance.FallbackInterceptor
+indi.kurok1.interceptor.microprofile.faulttolerance.RetryInterceptor
+indi.kurok1.interceptor.microprofile.faulttolerance.TimeoutInterceptor
+indi.kurok1.interceptor.impl.NotifyInterceptor
