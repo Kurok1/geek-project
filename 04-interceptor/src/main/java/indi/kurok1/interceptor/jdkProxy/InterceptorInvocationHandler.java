@@ -8,10 +8,7 @@ import javax.interceptor.Interceptors;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * JDK动态代理实现 {@link }
@@ -42,9 +39,11 @@ public class InterceptorInvocationHandler implements InvocationHandler {
                 Interceptors interceptors = (Interceptors) annotation;
                 if (interceptors.value().length > 0) {
                     for (Class clazz : interceptors.value()) {
-                        Object interceptor = this.registry.getInterceptor(clazz);
-                        if (interceptor != null && !resolvedInterceptors.contains(interceptor))
-                            resolvedInterceptors.add(interceptor);
+                        Optional<Object> interceptor = this.registry.getInterceptor(clazz);
+                        interceptor.ifPresent((value) ->{
+                            if (!resolvedInterceptors.contains(value))
+                                resolvedInterceptors.add(value);
+                        });
                     }
                 }
                 continue;
