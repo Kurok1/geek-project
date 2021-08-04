@@ -18,6 +18,7 @@
         <module>03-rpc</module>
         <module>04-interceptor</module>
         <module>project-commons</module>
+        <module>05caching</module>
     </modules>
 
     <properties>

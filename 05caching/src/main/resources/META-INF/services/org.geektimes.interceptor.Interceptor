@@ -1,0 +1,4 @@
+indi.kurok1.cache.annotation.interceptor.CachePutInterceptor
+indi.kurok1.cache.annotation.interceptor.CacheRemoveInterceptor
+indi.kurok1.cache.annotation.interceptor.CacheRemoveAllInterceptor
+indi.kurok1.cache.annotation.interceptor.CacheResultInterceptor
