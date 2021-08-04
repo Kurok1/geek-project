@@ -19,6 +19,7 @@ package org.geektimes.commons.util;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.reflect.AnnotatedElement;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -106,5 +107,19 @@ public class AnnotationUtils {
         }
 
         return unmodifiableList(filterAll(asList(annotatedElement.getDeclaredAnnotations()), annotationsToFilter));
+    }
+
+    public static boolean contains(Collection<Annotation> annotations, Class<? extends Annotation> annotationType) {
+        if (annotations == null || annotations.isEmpty()) {
+            return false;
+        }
+        boolean contained = false;
+        for (Annotation annotation : annotations) {
+            if (Objects.equals(annotationType, annotation.annotationType())) {
+                contained = true;
+                break;
+            }
+        }
+        return contained;
     }
 }
