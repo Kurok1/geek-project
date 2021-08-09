@@ -1,6 +1,7 @@
 package org.geektimes.configuration.microprofile.config.source;
 
 import org.eclipse.microprofile.config.spi.ConfigSource;
+import org.geektimes.configuration.microprofile.config.annotation.ConfigSourcesScanner;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -46,6 +47,10 @@ public class ConfigSources implements Iterable<ConfigSource> {
         }
 
         addConfigSources(load(ConfigSource.class, classLoader));
+
+        ConfigSourcesScanner sourcesScanner = new ConfigSourcesScanner(this, this.classLoader);
+        sourcesScanner.scan("org.geektimes.configuration.demo");
+
         addedDiscoveredConfigSources = true;
     }
 
