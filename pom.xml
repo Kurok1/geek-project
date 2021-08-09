@@ -19,6 +19,7 @@
         <module>04-interceptor</module>
         <module>project-commons</module>
         <module>05caching</module>
+        <module>06-config-sources</module>
     </modules>
 
     <properties>
