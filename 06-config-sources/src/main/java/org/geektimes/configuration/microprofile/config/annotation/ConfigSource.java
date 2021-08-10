@@ -16,6 +16,9 @@
  */
 package org.geektimes.configuration.microprofile.config.annotation;
 
+import org.geektimes.configuration.microprofile.config.discover.ConfigSourceFactory;
+import org.geektimes.configuration.microprofile.config.discover.classpath.ClassPathPropertiesConfigSourceFactory;
+
 import java.lang.annotation.*;
 import java.net.URL;
 
@@ -67,7 +70,7 @@ public @interface ConfigSource {
      * The factory to create {@link org.eclipse.microprofile.config.spi.ConfigSource}
      *
      * @return the factory class
-     * @see DefaultConfigSourceFactory
+     * @see ClassPathPropertiesConfigSourceFactory
      */
     Class<? extends ConfigSourceFactory> factory() default ConfigSourceFactory.class;
 }

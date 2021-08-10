@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.geektimes.configuration.microprofile.config.annotation;
+package org.geektimes.configuration.microprofile.config.discover;
 
 import org.eclipse.microprofile.config.spi.ConfigSource;
 
@@ -38,4 +38,21 @@ public interface ConfigSourceFactory {
      * @return {@link org.eclipse.microprofile.config.spi.ConfigSource}
      */
     org.eclipse.microprofile.config.spi.ConfigSource createConfigSource(String name, int ordinal, URL resource, String encoding);
+
+    /**
+     * Determine whether the current resource supports loading
+     * @param name {@link ConfigSource#getName()}
+     * @param resource the {@link URL} for the content of {@link ConfigSource}
+     * @return can loading if true
+     */
+    boolean isSupport(String name, URL resource);
+
+    /**
+     * auto generate config source name when name is not set
+     * @param url url
+     * @return 配置源名称
+     */
+    default String generateConfigSourceName(URL url) {
+        return String.format("%s@%d", url.toString(), System.identityHashCode(url));
+    }
 }

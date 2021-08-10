@@ -16,6 +16,8 @@
  */
 package org.geektimes.configuration.microprofile.config.annotation;
 
+import org.geektimes.configuration.microprofile.config.discover.ConfigSourceFactory;
+import org.geektimes.configuration.microprofile.config.discover.classpath.ClassPathPropertiesConfigSourceFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +42,7 @@ public class ConfigSourceTest {
         URL resourceURL = new URL(resource);
         Class<? extends ConfigSourceFactory> configSourceFactoryClass = configSource.factory();
         if (ConfigSourceFactory.class.equals(configSourceFactoryClass)) {
-            configSourceFactoryClass = DefaultConfigSourceFactory.class;
+            configSourceFactoryClass = ClassPathPropertiesConfigSourceFactory.class;
         }
 
         ConfigSourceFactory configSourceFactory = configSourceFactoryClass.newInstance();

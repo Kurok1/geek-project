@@ -72,4 +72,8 @@ public class DefaultConfigBuilder implements ConfigBuilder {
         converters.addDiscoveredConverters();
         return config;
     }
+
+    protected final ConfigSources getConfigSources() {
+        return this.configSources;
+    }
 }

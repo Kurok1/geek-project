@@ -14,10 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.geektimes.configuration.microprofile.config.annotation;
+package org.geektimes.configuration.microprofile.config.discover.classpath;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.microprofile.config.spi.ConfigSource;
+import org.geektimes.configuration.microprofile.config.discover.ConfigSourceFactory;
+import org.geektimes.configuration.microprofile.config.discover.ProtocolBasedConfigSourceFactory;
 import org.geektimes.configuration.microprofile.config.source.MapConfigSource;
 
 import java.io.IOException;
@@ -27,12 +29,13 @@ import java.net.URL;
 import java.util.Properties;
 
 /**
- * The default implementation of  {@link ConfigSourceFactory}
+ * The implementation of  {@link ConfigSourceFactory}
+ * load from properties file
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
-public class DefaultConfigSourceFactory implements ConfigSourceFactory {
+public class ClassPathPropertiesConfigSourceFactory extends ProtocolBasedConfigSourceFactory {
 
     @Override
     public ConfigSource createConfigSource(String name, int ordinal, URL resource, String encoding) {
@@ -47,5 +50,24 @@ public class DefaultConfigSourceFactory implements ConfigSourceFactory {
             throw new RuntimeException(e);
         }
         return configSource;
+    }
+
+    @Override
+    public boolean isSupport(String name, URL resource) {
+        //检查协议
+        boolean checkProtocol = super.isSupport(name, resource);
+        if (!checkProtocol)
+            return false;
+        //文件名以.properties结尾
+        String realPath = "";
+        if (resource.getPath() == null || resource.getPath().isEmpty())
+            realPath = "/" + resource.getAuthority();
+        else realPath = String.format("%s%s", resource.getAuthority(), resource.getPath());
+        return realPath.endsWith(".properties");
+    }
+
+    @Override
+    public String getSupportedProtocol() {
+        return "classpath";
     }
 }

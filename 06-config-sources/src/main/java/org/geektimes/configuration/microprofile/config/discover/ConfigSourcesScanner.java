@@ -1,4 +1,7 @@
-package org.geektimes.configuration.microprofile.config.annotation;
+package org.geektimes.configuration.microprofile.config.discover;
+
+import org.geektimes.configuration.microprofile.config.annotation.ConfigSource;
+import org.geektimes.configuration.microprofile.config.annotation.ConfigSources;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -35,7 +38,7 @@ public class ConfigSourcesScanner {
         this.loader = new ConfigSourcesLoader(classLoader);
     }
 
-    public void scan(String basePackageName) {
+    public final void scan(String basePackageName) {
         basePackageName = basePackageName.replace(".", "/");
         scanInternal(basePackageName, this.classLoader);
     }
@@ -71,7 +74,7 @@ public class ConfigSourcesScanner {
      * 解析一个类，并且加载配置
      * @param className 类的全限定名称
      */
-    protected void resolveClass(String className) throws ClassNotFoundException {
+    protected final void resolveClass(String className) throws ClassNotFoundException {
         Class<?> clazz = Class.forName(className, false, this.classLoader);
         List<ConfigSource> resolvedConfigSourceList = new LinkedList<>();
         if (clazz.isAnnotationPresent(ConfigSources.class)) {
@@ -102,10 +105,21 @@ public class ConfigSourcesScanner {
         String name = configSource.name();
         String path = configSource.resource();
         int ordinal = configSource.ordinal();
+        String encoding = configSource.encoding();
+        Class<? extends ConfigSourceFactory> clazz = configSource.factory();
         URL url = null;
         try {
             url = new URL(path);
-            org.eclipse.microprofile.config.spi.ConfigSource source = this.loader.load(name, ordinal, url);
+            if (!ConfigSourceFactory.class.equals(clazz)) {
+                //非默认值,需要查询指定的ConfigSourceFactory
+                ConfigSourceFactory factory = this.loader.getConfigSourceFactory(clazz);
+                if (factory != null) {
+                    org.eclipse.microprofile.config.spi.ConfigSource source = factory.createConfigSource(name, ordinal, url, encoding);
+                    this.configSources.addConfigSources(source);
+                    return;
+                }
+            }
+            org.eclipse.microprofile.config.spi.ConfigSource source = this.loader.createConfigSource(name, ordinal, url, encoding);
             this.configSources.addConfigSources(source);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);

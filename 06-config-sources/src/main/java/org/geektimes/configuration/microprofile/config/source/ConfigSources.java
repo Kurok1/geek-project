@@ -1,7 +1,7 @@
 package org.geektimes.configuration.microprofile.config.source;
 
 import org.eclipse.microprofile.config.spi.ConfigSource;
-import org.geektimes.configuration.microprofile.config.annotation.ConfigSourcesScanner;
+import org.geektimes.configuration.microprofile.config.discover.ConfigSourcesScanner;
 
 import java.util.Arrays;
 import java.util.Iterator;
