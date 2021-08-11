@@ -18,6 +18,9 @@ public abstract class ProtocolBasedConfigSourceFactory implements ConfigSourceFa
             throw new NullPointerException();
     }
 
+    /**
+     * @return 当前`ConfigSourceFactory`支持的协议
+     */
     public abstract String getSupportedProtocol();
 
     @Override

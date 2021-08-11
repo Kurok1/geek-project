@@ -48,9 +48,6 @@ public class ConfigSources implements Iterable<ConfigSource> {
 
         addConfigSources(load(ConfigSource.class, classLoader));
 
-        ConfigSourcesScanner sourcesScanner = new ConfigSourcesScanner(this, this.classLoader);
-        sourcesScanner.scan("org.geektimes.configuration.demo");
-
         addedDiscoveredConfigSources = true;
     }
 

@@ -53,7 +53,11 @@ public class DefaultConfigProviderResolver extends ConfigProviderResolver {
     }
 
     protected Config newConfig(ClassLoader classLoader) {
-        return newConfigBuilder(classLoader).build();
+        return newConfigBuilder(classLoader)
+                .addDefaultSources()
+                .addDiscoveredSources()
+                .addDiscoveredConverters()
+                .build();
     }
 
     @Override

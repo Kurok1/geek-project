@@ -38,11 +38,20 @@ public class ConfigSourcesScanner {
         this.loader = new ConfigSourcesLoader(classLoader);
     }
 
+    /**
+     * 扫描指定包下的所有类
+     * @param basePackageName 指定包
+     */
     public final void scan(String basePackageName) {
         basePackageName = basePackageName.replace(".", "/");
         scanInternal(basePackageName, this.classLoader);
     }
 
+    /**
+     * 扫描路径下的类文件，递归扫描子文件夹
+     * @param basePath 文件系统的路径
+     * @param classLoader 类加载器
+     */
     protected void scanInternal(String basePath, ClassLoader classLoader) {
         try {
             Enumeration<URL> resources = classLoader.getResources(basePath);
@@ -91,6 +100,10 @@ public class ConfigSourcesScanner {
         loadConfigSources(resolvedConfigSourceList.toArray(new ConfigSource[0]));
     }
 
+    /**
+     * 批量加载{@link ConfigSource}
+     * @param configSources 作用于类上的ConfigSource集合
+     */
     private void loadConfigSources(ConfigSource[] configSources) {
         if (configSources == null || configSources.length == 0) {
             return;
@@ -101,6 +114,11 @@ public class ConfigSourcesScanner {
         }
     }
 
+    /**
+     * 加载单个{@link ConfigSource}，
+     * @see ConfigSourceFactory
+     * @param configSource 目标类上的ConfigSource
+     */
     protected void loadConfigSource(ConfigSource configSource) {
         String name = configSource.name();
         String path = configSource.resource();
