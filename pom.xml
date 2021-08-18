@@ -20,6 +20,7 @@
         <module>project-commons</module>
         <module>05caching</module>
         <module>06-config-sources</module>
+        <module>07-validation</module>
     </modules>
 
     <properties>
@@ -57,7 +58,8 @@
         <hibernate.version>5.4.29.Final</hibernate.version>
         <hibernate.validator.version>5.4.3.Final</hibernate.validator.version>
         <glassfish-el.version>3.0.1-b08</glassfish-el.version>
-        <jackson.version>2.9.5</jackson.version>
+        <jackson.version>2.11.4</jackson.version>
+        <jackson-bom.version>2.9.5</jackson-bom.version>
         <activemq.version>5.9.1</activemq.version>
         <tomcat7.version>7.0.37</tomcat7.version>
         <tomcat8.version>8.5.64</tomcat8.version>
