@@ -21,6 +21,7 @@
         <module>05caching</module>
         <module>06-config-sources</module>
         <module>07-validation</module>
+        <module>08-reactive</module>
     </modules>
 
     <properties>
