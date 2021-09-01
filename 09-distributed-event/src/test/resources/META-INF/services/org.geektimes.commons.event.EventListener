@@ -1,1 +1,4 @@
 indi.kurok1.event.jms.MyListener
+indi.kurok1.event.jms.object.UserEventListener
+indi.kurok1.event.jms.MapListener
+indi.kurok1.event.jms.BytesListener

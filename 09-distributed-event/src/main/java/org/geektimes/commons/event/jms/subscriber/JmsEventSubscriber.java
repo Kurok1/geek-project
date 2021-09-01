@@ -22,7 +22,7 @@ import java.util.concurrent.Executor;
  * @author <a href="mailto:chan@ittx.com.cn">韩超</a>
  * @version 2021.08.31
  */
-public abstract class JmsEventSubscriber extends LocalSessionProvider implements MessageListener, EventDispatcher {
+public abstract class JmsEventSubscriber extends LocalSessionProvider implements MessageListener, EventDispatcher, Runnable {
 
     private final CopyOnWriteArrayList<EventListener<? extends Event>> listeners = new CopyOnWriteArrayList<>();
 
@@ -104,6 +104,21 @@ public abstract class JmsEventSubscriber extends LocalSessionProvider implements
     @Override
     public List<EventListener<?>> getAllEventListeners() {
         return listeners;
+    }
+
+
+    @Override
+    public void run() {
+        try {
+            MessageConsumer consumer = getSession(this.properties).createConsumer(this.getDestination());
+            consumer.setMessageListener(this);
+            while (true) {
+                //阻塞当前线程
+            }
+        } catch (Throwable t) {
+            onDestroy();
+            throw new RuntimeException(t);
+        }
     }
 
     protected void onDestroy() {

@@ -18,7 +18,7 @@ import java.util.Properties;
  * @version 2021.09.01
  * @see JmsEventSubscriber
  */
-public class ActiveMQEventSubscriber extends JmsEventSubscriber implements Runnable {
+public class ActiveMQEventSubscriber extends JmsEventSubscriber {
 
     private final static String HOST_PROPERTIES = "jms.activemq.endpoint.host";
     private final static String PORT_PROPERTIES = "jms.activemq.endpoint.port";
@@ -34,21 +34,6 @@ public class ActiveMQEventSubscriber extends JmsEventSubscriber implements Runna
         if (port <= 0)
             port = 61616;
         return new URI(String.format("tcp://%s:%d", host, port));
-    }
-
-
-    @Override
-    public void run() {
-        try {
-            MessageConsumer consumer = getSession(super.properties).createConsumer(super.getDestination());
-            consumer.setMessageListener(this);
-            while (true) {
-                //阻塞当前线程
-            }
-        } catch (Throwable t) {
-            onDestroy();
-            throw new RuntimeException(t);
-        }
     }
 
     @Override
