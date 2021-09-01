@@ -1,0 +1,4 @@
+org.geektimes.commons.event.jms.publisher.activemq.ActiveMQTextEventEmitter
+org.geektimes.commons.event.jms.publisher.activemq.ActiveMQMapEventEmitter
+org.geektimes.commons.event.jms.publisher.activemq.ActiveMQObjectEventEmitter
+org.geektimes.commons.event.jms.publisher.activemq.ActiveMQBytesEventEmitter

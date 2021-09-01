@@ -14,30 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.geektimes.commons.util;
-
-import org.junit.Test;
-
-import static org.geektimes.commons.util.ExceptionUtils.wrapThrowable;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+package org.geektimes.commons.event;
 
 /**
- * {@link ExceptionUtils} Test
+ * Direct {@link EventDispatcher} implementation uses current thread execution model
  *
- * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
+ * @see EventDispatcher
  * @since 1.0.0
  */
-public class ExceptionUtilsTest {
+public final class DirectEventDispatcher extends AbstractEventDispatcher {
 
-    @Test
-    public void testWrapThrowable() {
-        RuntimeException exception = wrapThrowable(new Throwable("AAA"), RuntimeException.class);
-        assertEquals("AAA", exception.getMessage());
-        assertNull(exception.getCause());
+    public static final String NAME = "direct";
 
-        RuntimeException exception1 = wrapThrowable(new Throwable("AAA", exception), RuntimeException.class);
-        assertEquals("AAA", exception1.getMessage());
-        assertEquals(exception, exception1.getCause());
+    public DirectEventDispatcher() {
+        super(DIRECT_EXECUTOR);
     }
 }
