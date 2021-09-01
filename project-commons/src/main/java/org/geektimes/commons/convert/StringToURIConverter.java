@@ -14,14 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.geektimes.commons.sql;
+package org.geektimes.commons.convert;
+
+import java.net.URI;
+
+import static org.geektimes.commons.lang.util.StringUtils.isBlank;
 
 /**
- * JDBC Utilities class
+ * The class to convert {@link String} to {@link URI}
  *
- * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
-public interface JdbcUtils {
+public class StringToURIConverter implements StringConverter<URI> {
 
+    @Override
+    public URI convert(String source) {
+        if (isBlank(source)) {
+            return null;
+        }
+        return URI.create(source);
+    }
 }

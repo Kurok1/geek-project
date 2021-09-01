@@ -14,23 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.geektimes.commons.util;
+package org.geektimes.commons.convert;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import static org.geektimes.commons.lang.util.ClassLoaderUtils.getClassLoader;
+import static org.geektimes.commons.lang.util.StringUtils.isBlank;
+import static org.geektimes.commons.reflect.util.ClassUtils.resolveClass;
 
 /**
- * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
- * @since
+ * The class to convert {@link String} to {@link Class}
+ *
+ * @since 1.0.0
  */
-public interface Maps {
+public class StringToClassConverter implements StringConverter<Class<?>> {
 
-    static Map of(Object... values) {
-        Map map = new LinkedHashMap();
-        int length = values.length;
-        for (int i = 0; i < length; ) {
-            map.put(values[i++], values[i++]);
+    @Override
+    public Class<?> convert(String source) {
+        if (isBlank(source)) {
+            return null;
         }
-        return map;
+        ClassLoader classLoader = getClassLoader(getClass());
+        return resolveClass(source, classLoader);
     }
 }

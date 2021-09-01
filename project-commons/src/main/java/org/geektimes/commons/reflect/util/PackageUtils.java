@@ -14,14 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.geektimes.commons.sql;
+package org.geektimes.commons.reflect.util;
+
+import java.util.Comparator;
+
+import static java.util.Comparator.comparing;
 
 /**
- * JDBC Utilities class
+ * The utilities class for
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
-public interface JdbcUtils {
+public abstract class PackageUtils {
 
+    public static final Comparator<Package> PACKAGE_NAME_COMPARATOR = comparing(Package::getName);
 }

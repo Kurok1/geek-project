@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.geektimes.commons.util;
+package org.geektimes.commons.lang.util;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ import static org.geektimes.commons.function.ThrowableSupplier.execute;
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
-public interface ExceptionUtils {
+public abstract interface ExceptionUtils {
 
     static <T extends Throwable> T wrapThrowable(Throwable source, Class<T> exceptionType) {
         String message = source.getMessage();

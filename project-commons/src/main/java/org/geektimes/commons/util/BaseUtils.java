@@ -14,14 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.geektimes.commons.sql;
+package org.geektimes.commons.util;
 
 /**
- * JDBC Utilities class
+ * The base utilities class
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
- * @since 1.0.0
+ * @since
  */
-public interface JdbcUtils {
+public abstract class BaseUtils {
 
+    protected BaseUtils() {
+        throw new RuntimeException("The utilities class must not be instantiated!");
+    }
 }
