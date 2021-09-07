@@ -23,6 +23,7 @@
         <module>07-validation</module>
         <module>08-reactive</module>
         <module>09-distributed-event</module>
+        <module>10-dubbo-filter</module>
     </modules>
 
     <properties>
@@ -77,6 +78,9 @@
 
         <!-- Testing 版本 -->
         <junit.version>4.13</junit.version>
+
+        <!--dubbo版本-->
+        <dubbo.version>2.7.13</dubbo.version>
 
         <!-- Maven Plugins 版本 -->
         <maven.compiler.version>3.8.1</maven.compiler.version>
