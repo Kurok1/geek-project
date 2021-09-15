@@ -24,6 +24,7 @@
         <module>08-reactive</module>
         <module>09-distributed-event</module>
         <module>10-dubbo-filter</module>
+        <module>11-spring-boot-starter</module>
     </modules>
 
     <properties>

@@ -9,33 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>10-dubbo-filter</artifactId>
+    <artifactId>11-spring-boot-starter</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <resilience4jVersion>1.7.0</resilience4jVersion>
-
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo-rpc-api</artifactId>
-            <version>${dubbo.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.github.resilience4j</groupId>
-            <artifactId>resilience4j-bulkhead</artifactId>
-            <version>${resilience4jVersion}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.resilience4j</groupId>
-            <artifactId>resilience4j-ratelimiter</artifactId>
-            <version>${resilience4jVersion}</version>
-        </dependency>
     </dependencies>
 
 </project>
