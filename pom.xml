@@ -25,6 +25,7 @@
         <module>09-distributed-event</module>
         <module>10-dubbo-filter</module>
         <module>11-spring-boot-starter</module>
+        <module>12-nacos</module>
     </modules>
 
     <properties>
@@ -92,6 +93,9 @@
         <maven.flatten.version>1.2.5</maven.flatten.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+
+        <!-- spring cloud alibaba nacos-->
+        <spring.cloud.alibaba.nacos.version>2.2.1.RELEASE</spring.cloud.alibaba.nacos.version>
     </properties>
 
     <!-- Artifacts 依赖版本管理 -->
@@ -104,6 +108,15 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Cloud Alibaba Dependencies -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.cloud.alibaba.nacos.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
