@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: service-provider
+    # zipkin相关配置
+  zipkin:
+  
+
+  # default disable all
+  cloud:
+    nacos:
+      discovery:
+        enabled: false
+        register-enabled: false
+    zookeeper:
+      enabled: false
+    consul:
+      enabled: false
+
+
+eureka:
+  client:
+    enabled: false
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
+      
+
+
